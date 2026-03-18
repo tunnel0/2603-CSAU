@@ -1,0 +1,180 @@
+:root {
+    --bg-dark: #0b0e14;
+    --sidebar-bg: #151921;
+    --accent: #7c4dff;
+    --accent-hover: #9575cd;
+    --text-main: #e0e0e0;
+    --text-muted: #a0a0a0;
+    --editor-bg: #1e2227;
+    --border: #2d333b;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--bg-dark);
+    color: var(--text-main);
+    height: 100vh;
+    overflow: hidden;
+}
+
+.app-container {
+    display: flex;
+    height: 100%;
+}
+
+.sidebar {
+    width: 280px;
+    background-color: var(--sidebar-bg);
+    border-right: 1px solid var(--border);
+    padding: 2rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.sidebar h1 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, #7c4dff, #00d2ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    padding-left: 0.5rem;
+}
+
+.lesson-item {
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    color: var(--text-muted);
+}
+
+.lesson-item:hover {
+    background-color: rgba(124, 77, 255, 0.1);
+    color: var(--text-main);
+}
+
+.lesson-item.active {
+    background-color: var(--accent);
+    color: white;
+    font-weight: 600;
+    box-shadow: 0 4px 12px rgba(124, 77, 255, 0.3);
+}
+
+.editor-section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.editor-header {
+    height: 64px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 2rem;
+    background-color: var(--bg-dark);
+}
+
+.primary-btn {
+    background-color: var(--accent);
+    color: white;
+    border: none;
+    padding: 0.6rem 1.2rem;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.primary-btn:hover {
+    background-color: var(--accent-hover);
+}
+
+.primary-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.content-wrapper {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 2rem;
+    gap: 1.5rem;
+    overflow-y: auto;
+}
+
+.lesson-text {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    max-width: 800px;
+}
+
+.editor-container {
+    flex: 1;
+    min-height: 300px;
+    background-color: var(--editor-bg);
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+}
+
+#code-editor {
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    border: none;
+    color: #abb2bf;
+    font-family: 'Fira Code', monospace;
+    font-size: 1rem;
+    padding: 1.5rem;
+    resize: none;
+    outline: none;
+    line-height: 1.5;
+}
+
+.terminal {
+    height: 200px;
+    background-color: #000;
+    border-radius: 8px;
+    padding: 1rem;
+    font-family: 'Fira Code', monospace;
+}
+
+.terminal h3 {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+#output {
+    white-space: pre-wrap;
+    font-size: 0.95rem;
+}
+
+/* Glassmorphism scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+::-webkit-scrollbar-track {
+    background: var(--bg-dark);
+}
+::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #444;
+}

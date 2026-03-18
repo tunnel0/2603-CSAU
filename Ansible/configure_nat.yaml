@@ -1,0 +1,29 @@
+- name: Configure PAT on R1
+  hosts: R1
+  gather_facts: false
+  tasks:
+    - name: Configure NAT Access List
+      cisco.ios.ios_config:
+        lines:
+          - access-list 100 permit ip 10.1.1.0 0.0.0.255 any
+          - access-list 100 permit ip 10.2.2.0 0.0.0.255 any
+
+    - name: Configure NAT Outside Interface
+      cisco.ios.ios_config:
+        lines:
+          - ip nat outside
+        parents: interface GigabitEthernet1
+
+    - name: Configure NAT Inside Interfaces
+      cisco.ios.ios_config:
+        lines:
+          - ip nat inside
+        parents: "{{ item }}"
+      loop:
+        - interface GigabitEthernet2
+        - interface GigabitEthernet3
+
+    - name: Configure PAT (NAT Overload)
+      cisco.ios.ios_config:
+        lines:
+          - ip nat inside source list 100 interface GigabitEthernet1 overload

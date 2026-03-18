@@ -1,0 +1,45 @@
+- name: Configure Router Interfaces
+  hosts: all
+  gather_facts: false
+  tasks:
+    - name: Configure GigabitEthernet2
+      cisco.ios.ios_interfaces:
+        config:
+          - name: GigabitEthernet2
+            description: Configured by Ansible
+            enabled: true
+      
+    - name: Configure GigabitEthernet2 IP
+      cisco.ios.ios_l3_interfaces:
+        config:
+          - name: GigabitEthernet2
+            ipv4:
+              - address: "{{ g2_ip }}/24"
+
+    - name: Configure GigabitEthernet3
+      cisco.ios.ios_interfaces:
+        config:
+          - name: GigabitEthernet3
+            description: Configured by Ansible
+            enabled: true
+
+    - name: Configure GigabitEthernet3 IP
+      cisco.ios.ios_l3_interfaces:
+        config:
+          - name: GigabitEthernet3
+            ipv4:
+              - address: "{{ g3_ip }}/24"
+
+    - name: Configure Loopback0
+      cisco.ios.ios_interfaces:
+        config:
+          - name: Loopback0
+            description: Loopback configured by Ansible
+            enabled: true
+
+    - name: Configure Loopback0 IP
+      cisco.ios.ios_l3_interfaces:
+        config:
+          - name: Loopback0
+            ipv4:
+              - address: "{{ loopback_ip }}/32"

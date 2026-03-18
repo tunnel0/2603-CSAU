@@ -1,0 +1,24 @@
+- name: Configure OSPF Routing
+  hosts: all
+  gather_facts: false
+  tasks:
+    - name: Configure OSPF process 1 and Area 0
+      cisco.ios.ios_ospfv2:
+        config:
+          processes:
+            - process_id: 1
+              areas:
+                - area_id: 0
+              network:
+                - address: 10.0.0.0
+                  wildcard_bits: 0.255.255.255
+                  area: 0
+
+    - name: Add default-information originate for R1
+      when: inventory_hostname == 'R1'
+      cisco.ios.ios_ospfv2:
+        config:
+          processes:
+            - process_id: 1
+              default_information:
+                originate: true

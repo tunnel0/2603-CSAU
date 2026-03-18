@@ -1,0 +1,26 @@
+---
+- name: Playbook Interactivo para Configurar Descripciones de Interfaces
+  hosts: all
+  gather_facts: false
+  
+  vars_prompt:
+    - name: interface_number
+      prompt: "¿Qué número de interfaz GigabitEthernet deseas configurar? (ej. 2)"
+      private: false
+    - name: interface_description
+      prompt: "¿Qué descripción deseas asignar?"
+      private: false
+
+  tasks:
+    - name: Configurar la descripción en la interfaz
+      cisco.ios.ios_interfaces:
+        config:
+          - name: "GigabitEthernet{{ interface_number }}"
+            description: "{{ interface_description }}"
+        state: merged
+      register: result
+
+    - name: Mostrar resumen de cambios
+      ansible.builtin.debug:
+        msg: "La interfaz GigabitEthernet{{ interface_number }} en {{ inventory_hostname }} ha sido configurada con: {{ interface_description }}"
+      when: result.changed

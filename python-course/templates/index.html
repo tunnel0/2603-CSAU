@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Python Course</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <!-- Using Inter font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Fira+Code&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <aside class="sidebar">
+            <h1>Python Mini-Course</h1>
+            <nav id="curriculum">
+                <div class="lesson-item active" onclick="loadLesson(0)">1. Introducción</div>
+                <div class="lesson-item" onclick="loadLesson(1)">2. Variables</div>
+                <div class="lesson-item" onclick="loadLesson(2)">3. Bucles</div>
+            </nav>
+        </aside>
+        
+        <main class="editor-section">
+            <header class="editor-header">
+                <h2 id="lesson-title">Introducción</h2>
+                <div class="controls">
+                    <button id="run-btn" class="primary-btn">Ejecutar Código</button>
+                </div>
+            </header>
+            
+            <div class="content-wrapper">
+                <div id="lesson-content" class="lesson-text">
+                    Bienvenido al mini curso. Escribe `print("Hola Mundo")` y haz clic en ejecutar.
+                </div>
+                
+                <div class="editor-container">
+                    <textarea id="code-editor" spellcheck="false">print("Hola Mundo")</textarea>
+                </div>
+                
+                <div class="terminal">
+                    <h3>Consola</h3>
+                    <pre id="output"></pre>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const lessons = [
+            {
+                title: "Introducción",
+                content: "Python es un lenguaje de programación versátil y fácil de aprender. Comencemos con el clásico 'Hola Mundo'.",
+                code: 'print("¡Hola Mundo!")'
+            },
+            {
+                title: "Variables",
+                content: "Las variables guardan información. En Python no necesitas declarar el tipo. Intenta cambiar el valor de `x`.",
+                code: 'x = 10\ny = 5\nprint(f"La suma de {x} + {y} es {x+y}")'
+            },
+            {
+                title: "Bucles",
+                content: "Usa `for` para repetir acciones. Prueba este bucle que recorre una lista.",
+                code: 'frutas = ["🍎", "🍌", "🍇"]\nfor f in frutas:\n    print(f"Me gusta comer {f}")'
+            }
+        ];
+
+        let currentLesson = 0;
+
+        function loadLesson(index) {
+            currentLesson = index;
+            document.querySelectorAll('.lesson-item').forEach((el, i) => {
+                el.classList.toggle('active', i === index);
+            });
+            document.getElementById('lesson-title').innerText = lessons[index].title;
+            document.getElementById('lesson-content').innerText = lessons[index].content;
+            document.getElementById('code-editor').value = lessons[index].code;
+            document.getElementById('output').innerText = '';
+        }
+
+        document.getElementById('run-btn').addEventListener('click', async () => {
+            const code = document.getElementById('code-editor').value;
+            const btn = document.getElementById('run-btn');
+            btn.innerText = 'Ejecutando...';
+            btn.disabled = true;
+
+            try {
+                const response = await fetch('/run', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ code })
+                });
+                const data = await response.json();
+                const outputEl = document.getElementById('output');
+                
+                if (data.error) {
+                    outputEl.innerText = '❌ Error:\n' + data.error;
+                    outputEl.style.color = '#ff6b6b';
+                } else {
+                    outputEl.innerText = data.output || '(Sin salida)';
+                    outputEl.style.color = '#51cf66';
+                }
+            } catch (err) {
+                document.getElementById('output').innerText = 'Error de conexión';
+            } finally {
+                btn.innerText = 'Ejecutar Código';
+                btn.disabled = false;
+            }
+        });
+    </script>
+</body>
+</html>

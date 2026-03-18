@@ -1,0 +1,16 @@
+- name: Configure DHCP Server on R1 and R2
+  hosts: all
+  gather_facts: false
+  tasks:
+    - name: Exclude gateway IP from DHCP pool
+      cisco.ios.ios_config:
+        lines:
+          - "ip dhcp excluded-address {{ g3_ip }}"
+
+    - name: Configure DHCP Pool for G3 Segment
+      cisco.ios.ios_config:
+        lines:
+          - "network {{ g3_network }} 255.255.255.0"
+          - "default-router {{ g3_ip }}"
+          - dns-server 8.8.8.8 8.8.4.4
+        parents: "ip dhcp pool POOL_LAN_G3"
